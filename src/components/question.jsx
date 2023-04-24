@@ -1,40 +1,41 @@
-import React, { useState } from 'react';
-import questions from '../data/questions'
+import React, { useState } from "react";
+import questions from "../data/questions";
 
-const Question = ({ number, handleAnswer }) => {
+const Question = ({ questionNumber, handleAnswerChange }) => {
+  const question = questions[questionNumber];
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-    const question = questions[number]
-    const [selectedOption, setSelectedOption] = useState(null);
-
-
-    const handleOptionChange = (e) => {
-        setSelectedOption(e.target.value);
+  const handleOptionSelect = (option) => {
+    let updatedOptions;
+    if (selectedOptions.includes(option)) {
+      updatedOptions = selectedOptions.filter((o) => o !== option);
+    } else {
+      updatedOptions = [...selectedOptions, option];
     }
+    setSelectedOptions(updatedOptions);
+    handleAnswerChange(questionNumber, updatedOptions);
+  };
 
-    const handleSubmit = () => {
-        // Process the selected option, e.g., update the answers state in the parent component
-        handleAnswer(number, selectedOption);
-    }
-
-    return (
-        <div>
-            <h2>What to you think about your {question.value} ?</h2>
-            <form>
-                {/* Render options dynamically */}
-                <label>
-                    <input type="radio" value="option1" checked={selectedOption === 'option1'} onChange={handleOptionChange} />
-                    Option 1
-                </label>
-                <label>
-                    <input type="radio" value="option2" checked={selectedOption === 'option2'} onChange={handleOptionChange} />
-                    Option 2
-                </label>
-
-
-                {number < 5 && <button type="button" onClick={handleSubmit}>Submit</button>}
-            </form>
-        </div>
-    );
+  return (
+    <div>
+      <h3>Question {question.value}</h3>
+      <ul>
+        {question.answers.map((answer, index) => (
+          <li key={index}>
+            <input
+              type="checkbox"
+              id={`option-${index}`}
+              name={`question-${questionNumber}`}
+              value={answer}
+              checked={selectedOptions.includes(answer)}
+              onChange={() => handleOptionSelect(answer)}
+            />
+            <label htmlFor={`option-${index}`}>{answer}</label>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default Question;

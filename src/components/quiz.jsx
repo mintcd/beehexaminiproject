@@ -9,7 +9,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import Question from './question';
+import questions from '../data/questions';
 
 ChartJS.register(
     RadialLinearScale,
@@ -24,23 +24,31 @@ ChartJS.register(
 
 export default function Quiz() {
 
-    const [question, setQuestion] = useState(1)
+    const [questionNumber, setQuestionumber] = useState(0)
     const [showChart, setShowChart] = useState(false)
-    const [answers, setAnswers] = useState([0, 0, 0, 0, 0])
+    const [answers, setAnswers] = useState({
+        0: null,
+        1: null,
+        2: null,
+        3: null,
+        4: null
+    })
 
-    const handleAnswer = (questionNumber, selectedOption) => {
-        // Update the answers state based on the selected answer
-        const updatedAnswers = [...answers];
-        updatedAnswers[questionNumber - 1] = selectedOption;
-        setAnswers(updatedAnswers);
+    const handleOptionChange = (e) => {
+        const value = Number(e.target.value); // convert value to number
+        setAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [questionNumber]: value
+          }));
+    }
 
-        // Move to the next question or show the chart when all questions are answered
-        if (questionNumber === 5) {
-            setShowChart(true);
-        } else {
-            setQuestion(questionNumber + 1);
-        }
-    };
+    const handleBack = (e) => {
+        setQuestionumber(questionNumber - 1)
+    }
+
+    const handleNext = (e) => {
+        setQuestionumber(questionNumber + 1)
+    }
 
     const data = {
         labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
@@ -55,8 +63,6 @@ export default function Quiz() {
         ],
     };
 
-
-
     return (
         <div>
             <h1>Quiz</h1>
@@ -69,10 +75,33 @@ export default function Quiz() {
                     </div>
                 )
                 :
-                (
-                    /* Render question according to @question */
-                    <div>{question === 1 && (<Question number={1} />)}</div>
+                (questionNumber === 0 && (
+                    <div>
+                        <h2>What do you think about your {questions[questionNumber].value}?</h2>
+                        <form>
+                            {questions[questionNumber].answers.map((x, index) => (
+                                <div key={questionNumber}>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            value={index}
+                                            checked={answers[index] === questionNumber}
+                                            onChange={handleOptionChange}
+                                        />
+                                        {x}
+                                    </label>
+                                </div>
+                            ))}
+                            {questionNumber > 0 && <button type="button" onClick={handleBack}>Back</button>}
+                            {questionNumber < 5 && <button type="button" onClick={handleNext}>Next</button>}
+                        </form>
+                    </div>
                 )
-            }
-        </div>)
+                )}
+        </div>
+    )
 }
+
+
+
+
