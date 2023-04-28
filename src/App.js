@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import questions from "./data/questions";
 import Question from "./components/question";
 import Graph from "./components/graph";
+import './styles.css'
 
 function App() {
   const [answers, setAnswers] = useState({});
