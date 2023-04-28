@@ -18,7 +18,7 @@ const Question = ({ questionNumber, handleAnswerChange }) => {
 
   return (
     <div>
-      <h3>Question {question.value}</h3>
+      <h3> {question.value} </h3>
       <ul>
         {question.answers.map((answer, index) => (
           <li key={index}>
