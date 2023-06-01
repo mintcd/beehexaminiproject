@@ -1,40 +1,32 @@
 import React, { useState } from "react";
-import questions from "./data/questions";
 import Question from "./components/question";
 import Graph from "./components/graph";
+import Login from "./components/login";
 import './styles.css'
 
 function App() {
-  const [answers, setAnswers] = useState({});
+  const [login, setLogin] = useState(true)
+  const [answers, setAnswers] = useState([[false, false, false, false, false],
+                                          [false, false, false, false, false],
+                                          [false, false, false, false, false],
+                                          [false, false, false, false, false],
+                                          [false, false, false, false, false]]);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [showSummary, setShowSummary] = useState(false);
 
-  const handleAnswerChange = (questionNumber, answerValue) => {
-    setAnswers((prevState) => ({
-      ...prevState,
-      [questionNumber]: answerValue,
-    }));
-  };
-
-  const handleFinishClick = () => {
-    setShowSummary(true);
-  };
-
+  const handleNext = (childAnswer) => {
+    let updatedAnswers = [...answers]
+    updatedAnswers[currentQuestion - 1] = [...childAnswer];
+    setAnswers(updatedAnswers);
+    if (currentQuestion < 5) setCurrentQuestion(currentQuestion + 1);
+    else setShowSummary(true);
+  
+  }
 
   return (
     <div>
-      {!showSummary &&
-        questions.map((question, index) => (
-          <div key={index}>
-            <Question
-              questionNumber={index}
-              handleAnswerChange={handleAnswerChange}
-              options={question.answers}
-            />
-          </div>
-        ))}
-      {!showSummary && (
-        <button onClick={handleFinishClick}>Finish</button>
-      )}
+      {login && <Login/>}
+      {!showSummary && <Question number={currentQuestion-1} onNext={handleNext}/>}
       {showSummary && <Graph answers={answers}/>}
     </div>
   );

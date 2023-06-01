@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import questions from "../data/questions";
 
-const Question = ({ questionNumber, handleAnswerChange }) => {
-  const question = questions[questionNumber];
-  const [selectedOptions, setSelectedOptions] = useState([]);
+const Question = ({number, onNext}) => {
+  const question = questions[number];
+  const [selected, setSelected] = useState([false, false, false, false, false]);
 
-  const handleOptionSelect = (option) => {
-    let updatedOptions;
-    if (selectedOptions.includes(option)) {
-      updatedOptions = selectedOptions.filter((o) => o !== option);
-    } else {
-      updatedOptions = [...selectedOptions, option];
-    }
-    setSelectedOptions(updatedOptions);
-    handleAnswerChange(questionNumber, updatedOptions);
+  const handleChange = (index) => {
+    let updatedSelected = [...selected];
+    updatedSelected[index] = !updatedSelected[index];
+    setSelected(updatedSelected);
   };
+
+  const handleNext = () => {
+    onNext(selected);
+    setSelected([false, false, false, false, false]) 
+  }
 
   return (
     <div>
@@ -25,15 +25,16 @@ const Question = ({ questionNumber, handleAnswerChange }) => {
             <input
               type="checkbox"
               id={`option-${index}`}
-              name={`question-${questionNumber}`}
+              name={`question-${number}`}
               value={answer}
-              checked={selectedOptions.includes(answer)}
-              onChange={() => handleOptionSelect(answer)}
+              checked={selected[index]}
+              onChange={() => handleChange(index)}
             />
             <label htmlFor={`option-${index}`}>{answer}</label>
           </li>
         ))}
       </ul>
+      <button onClick={handleNext}>Next</button>
     </div>
   );
 };
