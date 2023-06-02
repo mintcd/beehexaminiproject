@@ -39,7 +39,7 @@ function App() {
 
   const handleLogin = (username) => {
     setUsername(username);
-    setCurrentQuestion(currentQuestion + 1);
+    // setCurrentQuestion(currentQuestion + 1);
     console.log(username, "From Home")
   }
 
@@ -53,7 +53,7 @@ function App() {
 
   return (
     <div>
-      {/* {currentQuestion === 0 && <Login onLogin={handleLogin}/>} */}
+      <Login onLogin={handleLogin}/>
       {!showSummary && <Question number={currentQuestion-1} onNext={handleNext}/>}
       {showSummary && <Graph answers={answers} handleFinish={handleFinish}/>}
     </div>
