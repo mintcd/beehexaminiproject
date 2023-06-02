@@ -28,6 +28,10 @@ function App() {
     initializeDB();
   }, []);
 
+  const handleBack = () => {
+    if (currentQuestion > 1) setCurrentQuestion(currentQuestion - 1);
+  }
+
   const handleNext = (childAnswer) => {
     let updatedAnswers = [...answers]
     updatedAnswers[currentQuestion - 1] = [...childAnswer];
@@ -54,7 +58,7 @@ function App() {
   return (
     <div>
       <Login onLogin={handleLogin}/>
-      {!showSummary && <Question number={currentQuestion-1} onNext={handleNext}/>}
+      {!showSummary && <Question number={currentQuestion-1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish}/>}
       {showSummary && <Graph answers={answers} handleFinish={handleFinish}/>}
     </div>
   );

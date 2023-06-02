@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import questions from "../data/questions";
 
-const Question = ({number, onNext}) => {
+const Question = ({number, onNext, onBack, onFinish}) => {
   const question = questions[number];
   const [selected, setSelected] = useState([false, false, false, false, false]);
 
@@ -11,10 +11,19 @@ const Question = ({number, onNext}) => {
     setSelected(updatedSelected);
   };
 
+  const handleBack = () => {
+    onBack();
+  };
+
   const handleNext = () => {
     onNext(selected);
     setSelected([false, false, false, false, false]) 
   }
+
+  const handleFinish = () => {
+    onFinish()
+  }
+  console.log(number)
 
   return (
     <div>
@@ -34,7 +43,9 @@ const Question = ({number, onNext}) => {
           </li>
         ))}
       </ul>
-      <button onClick={handleNext}>Next</button>
+      {<button onClick={handleBack}>Previous</button>}
+      {number < 4 && <button onClick={handleNext}>Next</button>}
+      {number === 4 && <button onClick={handleFinish}>Finish</button>}
     </div>
   );
 };
