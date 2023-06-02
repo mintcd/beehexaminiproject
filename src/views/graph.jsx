@@ -20,14 +20,15 @@ ChartJS.register(
   Legend
 );
 
-export default function Graph({answers}) {
+export default function Graph({answers, handleFinish}) {
 
-    const getAnswerNumbers = answers.map((answer, index) => 
-                                          answer.filter((option) => option == true).length)
+    const getAnswerNumbers = answers.map((answer) => 
+                                          answer.filter((option) => option === true).length)
     const data = {
       labels: questions.map((question) => question.value),
       datasets: [
         {
+          label: "Your point",
           scale: 1,
           data: getAnswerNumbers,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -45,9 +46,17 @@ export default function Graph({answers}) {
         },
       },
     };
+
+    const handleClick = () => {
+      handleFinish();
+    }
   
 
     return (
-      <Radar data={data} options={options}/>
+      <div>
+        <h1> Congratulations! Here is your result. </h1>
+        <Radar data={data} options={options}/>
+        <input type="submit" value="Finish" onClick={handleClick}/>
+      </div>  
     );
   };
