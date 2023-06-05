@@ -23,7 +23,6 @@ const Question = ({ number, onNext, onBack, onFinish }) => {
   const handleFinish = () => {
     onFinish()
   }
-  console.log(number)
 
   return (
     <div class="question-container">

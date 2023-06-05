@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Question from "./views/question";
 import Graph from "./views/graph";
 import Login from "./views/login";
-import Leaderboard from "./views/leaderboard";
+// import Leaderboard from "./views/leaderboard";
 import Intro from "./views/intro";
 
 import connectDB from "./controllers/connectDB";
@@ -18,6 +18,7 @@ function App() {
   const [score, setScore] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
+  // const [topUsers, setTopUsers] = useState(null);
   useEffect(() => {
     const initializeDB = async () => {
       try {
@@ -32,13 +33,13 @@ function App() {
   }, []);
 
   // Interactors
-  const getTopUsers = async () => {
-    const { data } = await supabase.from('User').select('username', 'score');
-    console.log(data)
-    data.sort((a, b) => a.score - b.score)
-    if (data.length > 5) return data.slide(0, 5)
-    else return data
-  }
+  // const getTopUsers = async () => {
+  //   const { data } = await
+  //     supabase.from('User').select([username, score])
+  //   data.sort((a, b) => a.score - b.score)
+  //   if (data.length > 5) setTopUsers(data.slide(0, 5))
+  //   else setTopUsers(data)
+  // }
 
   // Handlers
 
@@ -65,12 +66,12 @@ function App() {
   }
 
   const handleFinish = async () => {
-    let answerValues = answers.map(answer => answer.map(value => value));
     setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
-    // await supabase
-    // .from('User')
-    // .insert({ username:username, selected:answerValues, score:score })
-    console.log({ username: username, selected: answerValues, score: score })
+    // setTopUsers(getTopUsers());
+    let answerValues = answers.map(answer => answer.map(value => value));
+    await supabase
+      .from('User')
+      .insert({ username: username, selected: answerValues, score: score })
     setShowSummary(true)
   }
 
@@ -81,7 +82,7 @@ function App() {
       {!showSummary && <Login onLogin={handleLogin} />}
       {logged && !showSummary && <Question number={currentQuestion - 1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} />}
       {showSummary && <Graph answers={answers} />}
-      {showSummary && <Leaderboard topUers={getTopUsers()}></Leaderboard>}
+      {/* {showSummary && <Leaderboard topUsers={topUsers}></Leaderboard>} */}
     </div>
   );
 }
