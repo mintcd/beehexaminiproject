@@ -7,7 +7,7 @@ import Leaderboard from "./views/leaderboard";
 import Intro from "./views/intro";
 
 import connectDB from "./controllers/connectDB";
-import './styles.scss'
+import './styles.css'
 
 function App() {
   // Hooks
@@ -80,7 +80,7 @@ function App() {
       {currentQuestion === 0 && <Intro />}
       {!showSummary && <Login onLogin={handleLogin} />}
       {logged && !showSummary && <Question number={currentQuestion - 1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} />}
-      {showSummary && <Graph answers={answers} handleFinish={handleFinish} />}
+      {showSummary && <Graph answers={answers} />}
       {showSummary && <Leaderboard topUers={getTopUsers()}></Leaderboard>}
     </div>
   );

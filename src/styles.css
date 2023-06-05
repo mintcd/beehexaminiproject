@@ -188,15 +188,13 @@ ol {
 .intro-list {
   display: flex;
   justify-content: center;
-
-  .intro-element {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
 }
 
-.graph-container {
-  .graph-title {
-    font-size: 20px;
-  }
+.intro-element {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.graph-title {
+  font-size: 20px;
 }

@@ -47,16 +47,10 @@ export default function Graph({ answers, handleFinish }) {
     },
   };
 
-  const handleClick = () => {
-    handleFinish();
-  }
-
-
   return (
     <div class="graph-container">
       <h1 class="graph-title"> Congratulations! Here is your result. </h1>
       <Radar class='radarchart' data={data} options={options} />
-      <input class="btn" type="submit" value="Finish" onClick={handleClick} />
     </div>
   );
 };
