@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import questions from "../data/questions";
 
-const Question = ({number, onNext, onBack, onFinish}) => {
+const Question = ({ number, onNext, onBack, onFinish }) => {
   const question = questions[number];
   const [selected, setSelected] = useState([false, false, false, false, false]);
 
@@ -17,7 +17,7 @@ const Question = ({number, onNext, onBack, onFinish}) => {
 
   const handleNext = () => {
     onNext(selected);
-    setSelected([false, false, false, false, false]) 
+    setSelected([false, false, false, false, false])
   }
 
   const handleFinish = () => {
@@ -26,26 +26,26 @@ const Question = ({number, onNext, onBack, onFinish}) => {
   console.log(number)
 
   return (
-    <div>
+    <div class="question-container">
       <h3> {question.value} </h3>
-      <ul>
-        {question.answers.map((answer, index) => (
-          <li key={index}>
-            <input
-              type="checkbox"
-              id={`option-${index}`}
-              name={`question-${number}`}
-              value={answer}
-              checked={selected[index]}
-              onChange={() => handleChange(index)}
-            />
-            <label htmlFor={`option-${index}`}>{answer}</label>
-          </li>
-        ))}
-      </ul>
-      {<button onClick={handleBack}>Previous</button>}
-      {number < 4 && <button onClick={handleNext}>Next</button>}
-      {number === 4 && <button onClick={handleFinish}>Finish</button>}
+      {question.answers.map((answer, index) => (
+        <div class="answer-container">
+          <input
+            class="select"
+            type="checkbox"
+            id={`option-${index}`}
+            name={`question-${number}`}
+            value={answer}
+            checked={selected[index]}
+            onChange={() => handleChange(index)}
+          />
+          <label> {answer} </label>
+        </div>
+
+      ))}
+      {number > 0 && <button class="btn" onClick={handleBack}>Previous</button>}
+      {number < 4 && <button class="btn" onClick={handleNext}>Next</button>}
+      {number === 4 && <button class="btn" onClick={handleFinish}>Finish</button>}
     </div>
   );
 };

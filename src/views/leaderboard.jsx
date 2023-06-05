@@ -1,7 +1,14 @@
-const Leaderboard = () => {
+import React from "react";
+
+const Leaderboard = ({topUsers}) => {
+
+
     return <div>
         <h1>
-            Awesome Guys - Try guessing who and go learn from them!
+            Hello from leaderboard
+            {console.log('topuser')}
         </h1>
     </div>
 }
+
+export default Leaderboard;
