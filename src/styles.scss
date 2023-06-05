@@ -40,6 +40,7 @@
 
 ul {
   list-style-type: none;
+  align-content: center;
 }
 
 .radarchart {
@@ -184,14 +185,13 @@ ol {
   padding-left: 50px;
 }
 
-.intro-container {
-  .intro-list {
-    align-items: center;
+.intro-list {
+  display: flex;
+  justify-content: center;
 
-    .intro-element {
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
+  .intro-element {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 
