@@ -88,13 +88,20 @@ function App() {
     // }
   }
 
+  const handleReset = () => {
+    setFinished(false);
+    setAnswers(Array(5).fill(Array(5).fill(false)));
+    setCurrentQuestion(0);
+    console.log(answers)
+  }
+
   // Calculators
   const getArea = () => {
     const getAnswerNumbers = answers.map((answer) => answer.filter((option) => option === true).length)
 
     const percent = Math.floor(getAnswerNumbers
       .map((value, index) => [value, getAnswerNumbers[(index + 1) % getAnswerNumbers.length]])
-      .map(pair => pair[0] * pair[1] / 2 * Math.sin(1.26))
+      .map(pair => pair[0] * pair[1] / 2 * Math.sin(1.25663))
       .reduce(function (a, b) { return a + b; }, 0) / maxArea * 100);
     return percent
   }
@@ -104,7 +111,7 @@ function App() {
       <Intro />
       <div className="button-container">
         {!started && <button className="btn" onClick={handleStart}>Start Test!</button>}
-        {started && <button className="btn" onClick={handleFinish}> Finish </button>}
+        {started && <button className="btn" onClick={handleReset}> Reset </button>}
       </div>
       {started &&
         <div ref={ref} className="row">
@@ -113,7 +120,7 @@ function App() {
             {finished &&
               <div className="finish-container">
                 <h1 className="intro-title"> Congratulation! </h1>
-                <div>Your area covers {getArea()}% of a perfect possible member's. </div>
+                <div>Your area covers {getArea()}% of a possibly perfect member's. </div>
                 {getArea() < 50 && <div> Try acquiring some more previous descriptions of Scrum values! </div>}
                 {getArea() > 50 && <div> Keep going! </div>}
               </div>

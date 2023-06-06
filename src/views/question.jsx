@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import questions from "../data/questions";
 
 const Question = ({ number, selections, onNext, onBack, onFinish, onChange }) => {
   const question = questions[number]
   const [selected, setSelected] = useState(selections)
+  useEffect(() => {
+    setSelected(selections);
+  }, [selections]);
+
 
   const handleChange = (index) => {
     let updatedSelected = [...selected];
