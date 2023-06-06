@@ -10,10 +10,14 @@ import connectDB from "./controllers/connectDB";
 import './styles.css'
 
 function App() {
+
+  const maxArea = 59.44103
+
   // Hooks
   const ref = useRef(null)
   const [started, setStarted] = useState(false);
   const [supabase, setSupabase] = useState(null);
+  const [finished, setFinished] = useState(false);
   // const [username, setUsername] = useState("")
   const [answers, setAnswers] = useState(Array(5).fill(Array(5).fill(false))) // 5 questions having 5 options each
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -72,9 +76,7 @@ function App() {
   // }
 
   const handleFinish = async (childAnswer) => {
-    let updatedAnswers = [...answers]
-    updatedAnswers[currentQuestion - 1] = [...childAnswer];
-    setAnswers(updatedAnswers);
+    setFinished(true)
     // if (!finished) {
     //   setFinished(true)
     //   setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
@@ -86,16 +88,36 @@ function App() {
     // }
   }
 
+  // Calculators
+  const getArea = () => {
+    const getAnswerNumbers = answers.map((answer) => answer.filter((option) => option === true).length)
+
+    const percent = Math.floor(getAnswerNumbers
+      .map((value, index) => [value, getAnswerNumbers[(index + 1) % getAnswerNumbers.length]])
+      .map(pair => pair[0] * pair[1] / 2 * Math.sin(1.26))
+      .reduce(function (a, b) { return a + b; }, 0) / maxArea * 100);
+    return percent
+  }
+
   return (
     <div>
       <Intro />
       <div className="button-container">
-        <button className="btn" onClick={handleStart}>Start Test!</button>
+        {!started && <button className="btn" onClick={handleStart}>Start Test!</button>}
+        {started && <button className="btn" onClick={handleFinish}> Finish </button>}
       </div>
       {started &&
         <div ref={ref} className="row">
           <div className="col-6">
-            <Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />
+            {!finished && <Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />}
+            {finished &&
+              <div className="finish-container">
+                <h1 className="intro-title"> Congratulation! </h1>
+                <div>Your area covers {getArea()}% of a perfect possible member's. </div>
+                {getArea() < 50 && <div> Try acquiring some more previous descriptions of Scrum values! </div>}
+                {getArea() > 50 && <div> Keep going! </div>}
+              </div>
+            }
           </div>
           <div className="col-6">
             <Graph answers={answers} />
