@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Question from "./views/question";
 import Graph from "./views/graph";
-import Login from "./views/login";
+// import Login from "./views/login";
 // import Leaderboard from "./views/leaderboard";
 import Intro from "./views/intro";
 
@@ -11,9 +11,9 @@ import './styles.css'
 
 function App() {
   // Hooks
-  const [logged, setLogged] = useState(false);
+  // const [logged, setLogged] = useState(false);
   const [supabase, setSupabase] = useState(null);
-  const [username, setUsername] = useState("")
+  // const [username, setUsername] = useState("")
   const [answers, setAnswers] = useState(Array(5).fill(Array(5).fill(false))) // 5 questions having 5 options each
   const [currentQuestion, setCurrentQuestion] = useState(0);
   // const [topUsers, setTopUsers] = useState(null);
@@ -55,13 +55,13 @@ function App() {
     if (currentQuestion < 4) setCurrentQuestion(currentQuestion + 1);
   }
 
-  const handleLogin = (username) => {
-    let invalidUsername = /^\s*$/
-    if (invalidUsername.test(username)) return false;
-    setLogged(true);
-    setUsername(username);
-    return true;
-  }
+  // const handleLogin = (username) => {
+  //   let invalidUsername = /^\s*$/
+  //   if (invalidUsername.test(username)) return false;
+  //   setLogged(true);
+  //   setUsername(username);
+  //   return true;
+  // }
 
   const handleFinish = async (childAnswer) => {
     let updatedAnswers = [...answers]
@@ -81,9 +81,9 @@ function App() {
   return (
     <div>
       <Intro />
-      {<Login onLogin={handleLogin} />}
-      {logged && <Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />}
-      {logged && <Graph answers={answers} />}
+      {/* {<Login onLogin={handleLogin} />} */}
+      {<Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />}
+      {<Graph answers={answers} />}
       {/* {showSummary && <Leaderboard topUsers={topUsers}></Leaderboard>} */}
     </div>
   );
