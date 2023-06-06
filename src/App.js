@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import Question from "./views/question";
 import Graph from "./views/graph";
@@ -11,7 +11,8 @@ import './styles.css'
 
 function App() {
   // Hooks
-  // const [logged, setLogged] = useState(false);
+  const ref = useRef(null)
+  const [started, setStarted] = useState(false);
   const [supabase, setSupabase] = useState(null);
   // const [username, setUsername] = useState("")
   const [answers, setAnswers] = useState(Array(5).fill(Array(5).fill(false))) // 5 questions having 5 options each
@@ -55,6 +56,13 @@ function App() {
     if (currentQuestion < 4) setCurrentQuestion(currentQuestion + 1);
   }
 
+  const handleStart = () => {
+    setStarted(true);
+    setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
+  }
+
   // const handleLogin = (username) => {
   //   let invalidUsername = /^\s*$/
   //   if (invalidUsername.test(username)) return false;
@@ -81,9 +89,19 @@ function App() {
   return (
     <div>
       <Intro />
-      {/* {<Login onLogin={handleLogin} />} */}
-      {<Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />}
-      {<Graph answers={answers} />}
+      <div className="button-container">
+        <button className="btn" onClick={handleStart}>Start Test!</button>
+      </div>
+      {started &&
+        <div ref={ref} className="row">
+          <div className="col-6">
+            <Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />
+          </div>
+          <div className="col-6">
+            <Graph answers={answers} />
+          </div>
+        </div>}
+
       {/* {showSummary && <Leaderboard topUsers={topUsers}></Leaderboard>} */}
     </div>
   );

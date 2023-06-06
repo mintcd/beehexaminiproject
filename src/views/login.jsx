@@ -19,7 +19,7 @@ const Login = ({ onLogin }) => {
 
     return (
         <div className="login-container">
-            <input placeholder="Enter your name" className="text-input" type="text" name="fname" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input placeholder="Enter your name" className="text-input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
             {!started && <input className="btn" type="submit" value="Start" onClick={handleStart} />}
             {started && <input className="btn" type="submit" value="Rename" onClick={handleRename} />}
             {error && <div> Your name should not be empty </div>}

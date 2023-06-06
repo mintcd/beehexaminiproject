@@ -29,7 +29,7 @@ const Question = ({ number, selections, onNext, onBack, onFinish, onChange }) =>
   return (
     <div className="container question-container">
       {console.log(number, selections)}
-      <h3> {question.value} </h3>
+      <h1 className="intro-title"> {question.value} </h1>
       {question.answers.map((answer, index) => (
         <div key={index} className="answer-container">
           <input
