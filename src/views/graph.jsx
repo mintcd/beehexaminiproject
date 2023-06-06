@@ -28,29 +28,40 @@ export default function Graph({ answers, handleFinish }) {
     labels: questions.map((question) => question.value),
     datasets: [
       {
-        label: "Point",
-        scale: 1,
+        label: "Scrum values visualization",
+        // scale: 1,
         data: getAnswerNumbers,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
+        scaleStep: 1,
       },
     ],
   };
 
   const options = {
-    scale: {
-      ticks: {
+    scales: {
+      r: {
+        angleLines: {
+          display: true,
+        },
         beginAtZero: true,
-        stepSize: 1, // Set the step size to 1 to display integer labels
+        suggestedMin: 0,
+        suggestedMax: 5,
+        ticks: {
+          stepSize: 1,
+        },
       },
     },
   };
 
   return (
     <div class="graph-container">
-      <h1 class="graph-title"> Congratulations! Here is your result. </h1>
-      <Radar class='radarchart' data={data} options={options} />
+      <h1 class="graph-title"> Result updates as you select </h1>
+      <div class="chart-container">
+        <Radar data={data} options={options} />
+      </div>
+
     </div>
   );
 };

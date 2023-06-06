@@ -17,7 +17,7 @@ function App() {
   const [answers, setAnswers] = useState(Array.from({ length: 5 }, () => [false, false, false, false, false]));
   const [score, setScore] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showSummary, setShowSummary] = useState(false);
+  const [finished, setFinished] = useState(false);
   // const [topUsers, setTopUsers] = useState(null);
   useEffect(() => {
     const initializeDB = async () => {
@@ -43,17 +43,18 @@ function App() {
 
   // Handlers
 
-  const handleBack = () => {
+  const handleBack = (childAnswer) => {
+    let updatedAnswers = [...answers]
+    updatedAnswers[currentQuestion - 1] = [...childAnswer];
     if (currentQuestion > 1) setCurrentQuestion(currentQuestion - 1);
+    setAnswers(updatedAnswers);
   }
 
   const handleNext = (childAnswer) => {
     let updatedAnswers = [...answers]
     updatedAnswers[currentQuestion - 1] = [...childAnswer];
-    setAnswers(updatedAnswers);
     if (currentQuestion < 5) setCurrentQuestion(currentQuestion + 1);
-    else setShowSummary(true);
-
+    setAnswers(updatedAnswers);
   }
 
   const handleLogin = (username) => {
@@ -65,23 +66,28 @@ function App() {
     return true;
   }
 
-  const handleFinish = async () => {
-    setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
-    // setTopUsers(getTopUsers());
-    let answerValues = answers.map(answer => answer.map(value => value));
-    await supabase
-      .from('User')
-      .insert({ username: username, selected: answerValues, score: score })
-    setShowSummary(true)
+  const handleFinish = async (childAnswer) => {
+    let updatedAnswers = [...answers]
+    updatedAnswers[currentQuestion - 1] = [...childAnswer];
+    setAnswers(updatedAnswers);
+    if (!finished) {
+      setFinished(true)
+      setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
+      // setTopUsers(getTopUsers());
+      let answerValues = answers.map(answer => answer.map(value => value));
+      await supabase
+        .from('User')
+        .insert({ username: username, selected: answerValues, score: score })
+    }
+
   }
 
   return (
     <div>
-      <h1> SCRUM Values Self-test </h1>
-      {currentQuestion === 0 && <Intro />}
-      {!showSummary && <Login onLogin={handleLogin} />}
-      {logged && !showSummary && <Question number={currentQuestion - 1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} />}
-      {showSummary && <Graph answers={answers} />}
+      <Intro />
+      {<Login onLogin={handleLogin} />}
+      {logged && <Question number={currentQuestion - 1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} />}
+      {logged && <Graph answers={answers} />}
       {/* {showSummary && <Leaderboard topUsers={topUsers}></Leaderboard>} */}
     </div>
   );
