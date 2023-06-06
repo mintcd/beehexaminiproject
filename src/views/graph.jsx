@@ -56,9 +56,9 @@ export default function Graph({ answers, handleFinish }) {
   };
 
   return (
-    <div class="graph-container">
-      <h1 class="graph-title"> Result updates as you select </h1>
-      <div class="chart-container">
+    <div className="graph-container">
+      <h1 className="graph-title"> Result updates as you select </h1>
+      <div className="chart-container">
         <Radar data={data} options={options} />
       </div>
 

@@ -14,10 +14,8 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [supabase, setSupabase] = useState(null);
   const [username, setUsername] = useState("")
-  const [answers, setAnswers] = useState(Array.from({ length: 5 }, () => [false, false, false, false, false]));
-  const [score, setScore] = useState(0)
+  const [answers, setAnswers] = useState(Array(5).fill(Array(5).fill(false))) // 5 questions having 5 options each
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [finished, setFinished] = useState(false);
   // const [topUsers, setTopUsers] = useState(null);
   useEffect(() => {
     const initializeDB = async () => {
@@ -43,18 +41,18 @@ function App() {
 
   // Handlers
 
-  const handleBack = (childAnswer) => {
+  const handleChange = (childAnswer) => {
     let updatedAnswers = [...answers]
-    updatedAnswers[currentQuestion - 1] = [...childAnswer];
-    if (currentQuestion > 1) setCurrentQuestion(currentQuestion - 1);
+    updatedAnswers[currentQuestion] = [...childAnswer];
     setAnswers(updatedAnswers);
   }
 
-  const handleNext = (childAnswer) => {
-    let updatedAnswers = [...answers]
-    updatedAnswers[currentQuestion - 1] = [...childAnswer];
-    if (currentQuestion < 5) setCurrentQuestion(currentQuestion + 1);
-    setAnswers(updatedAnswers);
+  const handleBack = () => {
+    if (currentQuestion > 0) setCurrentQuestion(currentQuestion - 1);
+  }
+
+  const handleNext = () => {
+    if (currentQuestion < 4) setCurrentQuestion(currentQuestion + 1);
   }
 
   const handleLogin = (username) => {
@@ -62,7 +60,6 @@ function App() {
     if (invalidUsername.test(username)) return false;
     setLogged(true);
     setUsername(username);
-    setCurrentQuestion(currentQuestion + 1);
     return true;
   }
 
@@ -70,23 +67,22 @@ function App() {
     let updatedAnswers = [...answers]
     updatedAnswers[currentQuestion - 1] = [...childAnswer];
     setAnswers(updatedAnswers);
-    if (!finished) {
-      setFinished(true)
-      setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
-      // setTopUsers(getTopUsers());
-      let answerValues = answers.map(answer => answer.map(value => value));
-      await supabase
-        .from('User')
-        .insert({ username: username, selected: answerValues, score: score })
-    }
-
+    // if (!finished) {
+    //   setFinished(true)
+    //   setScore(answers.map(ele => ele.reduce((acc, cur) => acc + cur), 0).reduce((acc, cur) => acc + cur))
+    //   // setTopUsers(getTopUsers());
+    //   let answerValues = answers.map(answer => answer.map(value => value));
+    //   await supabase
+    //     .from('User')
+    //     .insert({ username: username, selected: answerValues, score: score })
+    // }
   }
 
   return (
     <div>
       <Intro />
       {<Login onLogin={handleLogin} />}
-      {logged && <Question number={currentQuestion - 1} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} />}
+      {logged && <Question number={currentQuestion} selections={answers[currentQuestion]} onBack={handleBack} onNext={handleNext} onFinish={handleFinish} onChange={handleChange} />}
       {logged && <Graph answers={answers} />}
       {/* {showSummary && <Leaderboard topUsers={topUsers}></Leaderboard>} */}
     </div>
